@@ -31,7 +31,7 @@ def regeneration_automatique():
         time.sleep(120)
         for planet in planets:
             planet.regenerate_resources()
-        print("🌍 Les planètes ont régénéré leurs ressources !")
+        print("\n 🌍 Les planètes ont régénéré leurs ressources ! \n")
 
 def afficher_missions(player):
     """ Affiche les missions et vérifie leur accomplissement """
