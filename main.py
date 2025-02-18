@@ -2,6 +2,14 @@ from Vaisseau import Vaisseau, upgrade_ship
 from Planet import Planet
 from Player import Player
 from Mission import Mission
+import time
+
+# Définition des couleurs ANSI
+RED = '\033[91m'
+GREEN = '\033[92m'
+BLUE = '\033[94m'
+YELLOW = '\033[93m'
+RESET = '\033[0m'
 
 # Initialisation des planètes
 planets = [
@@ -19,9 +27,9 @@ missions = [
     Mission("Explorer une planète", lambda p: len(p.planetes_explorees) > 0, 50),
     Mission("Collecter au moins 30 ressources", lambda p: sum(p.resources.values()) >= 30, 100),
     Mission("Coloniser une planète", lambda p: len(p.colonies) >= 1, 150),
-    Mission("Explorer toutes les planètes", lambda p: len(p.planetes_explorees) > 2, 50),
-    Mission("Collecter au moins 200 ressources", lambda p: sum(p.resources.values()) >= 200, 100),
-    Mission("Coloniser toutes les planètes", lambda p: len(p.colonies) >= 3, 150),
+    Mission("Explorer toutes les planètes", lambda p: len(p.planetes_explorees) >= len(planets), 200),
+    Mission("Collecter au moins 200 ressources", lambda p: sum(p.resources.values()) >= 200, 300),
+    Mission("Coloniser toutes les planètes", lambda p: len(p.colonies) >= len(planets), 500),
 ]
 
 def afficher_missions(player):
@@ -35,6 +43,21 @@ def verifier_toutes_les_missions(player, vaisseau):
     """ Vérifie et met à jour toutes les missions après chaque action. """
     for mission in missions:
         mission.verifier_accomplissement(player, vaisseau)
+
+def afficher_caracteristiques_planete(planet):
+    print(f"{BLUE}\n🌍 Planète sélectionnée : {planet.name} {RESET}")
+    print(f"📏 Taille : {planet.size}")
+    print("🛠️ Ressources disponibles :")
+    for ressource, quantite in planet.resources.items():
+        print(f"  - {ressource.capitalize()} : {quantite}")
+    print(f"🏠 Colonisée : {'✅ Oui' if planet.colonized else '❌ Non'}")
+
+def barre_de_chargement(duree):
+    print("\n🚀 Voyage en cours...", end="", flush=True)
+    for _ in range(duree):
+        print("🚀", end="", flush=True)
+        time.sleep(1)
+    print(" ✅ Arrivée !\n")
 
 def main():
     print("Bienvenue dans SpaceFrontier!")
@@ -52,14 +75,22 @@ def main():
             print("Planètes disponibles pour l'exploration:")
             for i, planet in enumerate(planets):
                 print(f"{i + 1}. {planet.name} ({'Colonisée' if planet.colonized else 'Libre'})")
+            
             idx = int(input("Choisissez une planète à explorer : ")) - 1
             if 0 <= idx < len(planets):
-                if player.explore(planets[idx]):
-                    vaisseau.carburant -= 10
-                    verifier_toutes_les_missions(player, vaisseau)
-
+                planet = planets[idx]
+                afficher_caracteristiques_planete(planet)
+                confirmation = input("Êtes-vous sûr de vouloir explorer cette planète ? (Oui/Non) : ").lower()
+                
+                if confirmation == "oui":
+                    duree_voyage = min(10, max(1, len(planet.name)))  # Simulation d'une durée basée sur la planète
+                    barre_de_chargement(duree_voyage)
+                    if player.explore(planet):
+                        vaisseau.carburant -= 10
+                        verifier_toutes_les_missions(player, vaisseau)
+                
                 while True:
-                    print(f"\nQue voulez-vous faire sur {planets[idx].name} ?")
+                    print(f"\nQue voulez-vous faire sur {planet.name} ?")
                     print("1. Collecter des ressources")
                     print("2. Coloniser la planète")
                     print("3. Retour au menu principal")
@@ -67,10 +98,10 @@ def main():
                     action = input("Votre choix : ")
 
                     if action == "1":
-                        player.collect(planets[idx])
+                        player.collect(planet)
                         verifier_toutes_les_missions(player, vaisseau)
                     elif action == "2":
-                        player.colonize(planets[idx])
+                        player.colonize(planet)
                         verifier_toutes_les_missions(player, vaisseau)
                     elif action == "3":
                         break
