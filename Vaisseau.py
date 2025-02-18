@@ -28,7 +28,7 @@ class Vaisseau:
             print(f"{YELLOW}Vos moteurs sont déjà au maximum.{RESET}")
 
     def ameliorer_carburant(self):
-        cout = (self.carburant // 10) * 100
+        cout = (self.carburant // 10) * 20
         if self.carburant < 1000 and self.credits >= cout:
             print(f"{GREEN}Amélioration du carburant pour {cout} crédits. Vous pouvez maintenant voyager plus loin.{RESET}")
             self.carburant += 10
@@ -39,7 +39,7 @@ class Vaisseau:
             print(f"{YELLOW}Votre carburant est déjà au maximum.{RESET}")
 
     def ameliorer_armes(self):
-        cout = self.armes * 100
+        cout = self.armes * 10
         if self.armes < 100 and self.credits >= cout:
             print(f"{GREEN}Amélioration des armes pour {cout} crédits. Vous êtes maintenant plus puissant contre les ennemis.{RESET}")
             self.armes += 1
@@ -50,7 +50,7 @@ class Vaisseau:
             print(f"{YELLOW}Vos armes sont déjà au maximum.{RESET}")
 
     def ameliorer_scanners(self):
-        cout = self.scanners * 100
+        cout = self.scanners * 10
         if self.scanners < 100 and self.credits >= cout:
             print(f"{GREEN}Amélioration des scanners pour {cout} crédits. Vous pouvez maintenant détecter plus de ressources.{RESET}")
             self.scanners += 1
