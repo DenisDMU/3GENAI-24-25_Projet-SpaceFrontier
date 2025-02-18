@@ -32,6 +32,20 @@ missions = [
     Mission("Coloniser toutes les planètes", lambda p: len(p.colonies) >= len(planets), 500),
 ]
 
+def auto_regeneration(planets):
+    """ Régénère automatiquement les ressources des planètes toutes les 60 secondes. """
+    while True:
+        time.sleep(60)  # ⏳ Régénération toutes les 60 secondes
+        for planet in planets:
+            planet.regenerate_resources()
+
+def auto_production(player):
+    """ Ajoute les ressources des colonies au joueur toutes les 3 minutes """
+    while True:
+        time.sleep(180)  # Attendre 180 secondes
+        player.produce_resources()
+        print("\n🏭 Production automatique des colonies ajoutée aux ressources du joueur !")
+
 def afficher_missions(player):
     """ Affiche les missions et vérifie leur accomplissement """
     print("\n📜 Missions disponibles :")
@@ -70,6 +84,9 @@ def main():
         print("5. Quitter")
 
         choix = input("Que voulez-vous faire ? ")
+
+        threading.Thread(target=auto_regeneration, args=(planets,), daemon=True).start()
+        threading.Thread(target=auto_production, args=(player,), daemon=True).start()
 
         if choix == "1":
             while True:
