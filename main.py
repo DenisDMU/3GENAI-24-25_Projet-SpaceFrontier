@@ -26,12 +26,12 @@ missions = [
     Mission("Coloniser toutes les planètes", lambda p: len(p.colonies) >= 3, 150),
 ]
 
-def regeneration_automatique():
+def auto_regeneration(planets):
+    """ Régénère automatiquement les ressources des planètes toutes les 60 secondes. """
     while True:
-        time.sleep(120)
+        time.sleep(60)  # ⏳ Régénération toutes les 60 secondes
         for planet in planets:
             planet.regenerate_resources()
-        print("\n 🌍 Les planètes ont régénéré leurs ressources ! \n")
 
 def afficher_missions(player):
     """ Affiche les missions et vérifie leur accomplissement """
@@ -58,7 +58,7 @@ def main():
 
         choix = input("Que voulez-vous faire ? ")
 
-        threading.Thread(target=regeneration_automatique, daemon=True).start()
+        threading.Thread(target=auto_regeneration, args=(planets,), daemon=True).start()
 
         if choix == "1":
             # 🔽 Nouveau système : Le joueur choisit une planète et peut ensuite agir dessus

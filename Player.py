@@ -41,7 +41,7 @@ class Player:
                 print(f"   {i}. {resource} ({planet.resources[resource]} unités)")
 
             # 🔄 Choix du joueur avec un numéro
-            choice = input("\nSélectionnez une ressource à collecter (1, 2, 3...) ou 'q' pour quitter : ").strip()
+            choice = input("\nSélectionnez une ressource à collecter ou 'q' pour quitter : ").strip()
 
             if choice.lower() == 'q':
                 break  # Quitter la collecte
@@ -58,7 +58,7 @@ class Player:
             for i in range(5, 0, -1):
                 print(f"⏳ {i} secondes restantes...", end="\r", flush=True)
                 time.sleep(1)
-            print("✅ Extraction terminée !        ")  # Efface la ligne précédente
+            print("✅ Extraction terminée !")  # Efface la ligne précédente
 
             # Ajouter les ressources collectées au joueur
             to_collect = min(amount, planet.resources[chosen_resource])
@@ -68,7 +68,7 @@ class Player:
             print(f"✅ Vous avez collecté {to_collect} unités de {chosen_resource}.")
 
             # 🔥 Demander au joueur s'il veut continuer
-            choice = input("Voulez-vous continuer à miner ? (o/n) [O par défaut] : ").strip().lower()
+            choice = input("Voulez-vous continuer à miner ? (O/n) : ").strip().lower()
             if choice == 'n':
                 break  # Quitter si le joueur dit "n"
 
