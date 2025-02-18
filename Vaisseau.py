@@ -1,16 +1,16 @@
 class Vaisseau:
     def __init__(self):
         self.nom = "Vaisseau"
-        self.moteurs = 1  
-        self.armes = 1    
-        self.scanners = 1 
+        self.moteurs = 1
+        self.armes = 1
+        self.scanners = 1
         self.carburant = 100  # Capacité initiale
-        self.credits = 100000000
+        self.credits = 0
         self.modele = "Basique"  # Modèle par défaut
         self.modeles_debloques = ["Basique"]  # Liste des modèles débloqués
 
     def ameliorer_moteurs(self):
-        cout = self.moteurs * 10  # Coût augmente de 10 crédits par niveau
+        cout = self.moteurs * 10  # Coût augmente de 100 crédits par niveau
         if self.moteurs < 100 and self.credits >= cout:
             print(f"Amélioration des moteurs pour {cout} crédits. Vous pouvez maintenant voyager plus vite.")
             self.moteurs += 1
@@ -21,7 +21,7 @@ class Vaisseau:
             print("Vos moteurs sont déjà au maximum.")
 
     def ameliorer_carburant(self):
-        cout = self.carburant * 10
+        cout = (self.carburant // 10) * 100  # Coût augmente de 100 crédits par tranche de 10
         if self.carburant < 1000 and self.credits >= cout:
             print(f"Amélioration du carburant pour {cout} crédits. Vous pouvez maintenant voyager plus loin.")
             self.carburant += 10
@@ -32,7 +32,7 @@ class Vaisseau:
             print("Votre carburant est déjà au maximum.")
 
     def ameliorer_armes(self):
-        cout = self.armes * 10  # Coût augmente de 10 crédits par niveau
+        cout = self.armes * 100  # Coût augmente de 100 crédits par niveau
         if self.armes < 100 and self.credits >= cout:
             print(f"Amélioration des armes pour {cout} crédits. Vous êtes maintenant plus puissant contre les ennemis.")
             self.armes += 1
@@ -43,7 +43,7 @@ class Vaisseau:
             print("Vos armes sont déjà au maximum.")
 
     def ameliorer_scanners(self):
-        cout = self.scanners * 10  # Coût augmente de 10 crédits par niveau
+        cout = self.scanners * 100  # Coût augmente de 100 crédits par niveau
         if self.scanners < 100 and self.credits >= cout:
             print(f"Amélioration des scanners pour {cout} crédits. Vous pouvez maintenant détecter plus de ressources.")
             self.scanners += 1
@@ -54,14 +54,14 @@ class Vaisseau:
             print("Vos scanners sont déjà au maximum.")
 
     def ameliorer_vaisseau(self):
-        if self.modele == "Basique" and "Mercenaire" not in self.modeles_debloques and self.credits >= 5:
+        if self.modele == "Basique" and "Mercenaire" not in self.modeles_debloques and self.credits >= 50:
             confirmation = input("Payer 50 crédits pour débloquer le modèle Mercenaire ? (Oui/Non): ")
             if confirmation.lower() == "oui":
                 self.modeles_debloques.append("Mercenaire")
                 self.credits -= 50
                 print("Modèle Mercenaire débloqué !")
-        elif self.modele == "Mercenaire" and "Conqueror" not in self.modeles_debloques and self.credits >= 5:
-            confirmation = input("Payer 5 crédits pour débloquer le modèle Conqueror ? (Oui/Non): ")
+        elif self.modele == "Mercenaire" and "Conqueror" not in self.modeles_debloques and self.credits >= 50:
+            confirmation = input("Payer 50 crédits pour débloquer le modèle Conqueror ? (Oui/Non): ")
             if confirmation.lower() == "oui":
                 self.modeles_debloques.append("Conqueror")
                 self.credits -= 50
