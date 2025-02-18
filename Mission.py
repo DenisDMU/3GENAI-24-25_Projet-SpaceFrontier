@@ -9,5 +9,6 @@ class Mission:
         if not self.accomplie and self.objectif(player, vaisseau):
             self.accomplie = True
             player.credits += self.recompense
+            vaisseau.credits += self.recompense
             print(f"\n🎉 Bravo ! Vous avez accompli la mission : {self.description} 🎉")
             print(f"💰 Récompense : {self.recompense} crédits 💰\n")
