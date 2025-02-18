@@ -1,3 +1,5 @@
+import time
+import threading
 from Vaisseau import Vaisseau, upgrade_ship
 from Planet import Planet
 from Player import Player
@@ -19,10 +21,17 @@ missions = [
     Mission("Explorer une planète", lambda p: len(p.planetes_explorees) > 0, 50),
     Mission("Collecter au moins 30 ressources", lambda p: sum(p.resources.values()) >= 30, 100),
     Mission("Coloniser une planète", lambda p: len(p.colonies) >= 1, 150),
-    Mission("Explorer toutes les planètes", lambda p: len(p.planetes_explorees) > 2, 50),
+    Mission("Explorer toutes les planètes", lambda p: len(p.planetes_explorees) > 21, 50),
     Mission("Collecter au moins 200 ressources", lambda p: sum(p.resources.values()) >= 200, 100),
     Mission("Coloniser toutes les planètes", lambda p: len(p.colonies) >= 3, 150),
 ]
+
+def auto_regeneration(planets):
+    """ Régénère automatiquement les ressources des planètes toutes les 60 secondes. """
+    while True:
+        time.sleep(60)  # ⏳ Régénération toutes les 60 secondes
+        for planet in planets:
+            planet.regenerate_resources()
 
 def afficher_missions(player):
     """ Affiche les missions et vérifie leur accomplissement """
@@ -48,7 +57,10 @@ def main():
 
         choix = input("Que voulez-vous faire ? ")
 
+        threading.Thread(target=auto_regeneration, args=(planets,), daemon=True).start()
+
         if choix == "1":
+            # 🔽 Nouveau système : Le joueur choisit une planète et peut ensuite agir dessus
             print("Planètes disponibles pour l'exploration:")
             for i, planet in enumerate(planets):
                 print(f"{i + 1}. {planet.name} ({'Colonisée' if planet.colonized else 'Libre'})")
