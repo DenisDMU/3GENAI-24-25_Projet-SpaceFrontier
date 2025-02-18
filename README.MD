@@ -44,6 +44,7 @@ L’interface du programme est uniquement en ligne de commande.
 
 - **Planète** : Caractérisée par un nom, une taille, et des ressources disponibles.
 - **Ressource** : Caractérisée par un nom et une quantité.
+- **Vaisseau** : Caractérisée par un nom, une image ASCII, moteurs, armes, scanner, modèles.
 
 ## Installation
 
