@@ -41,7 +41,7 @@ class Planet:
 
         # ✅ Vérifier si la planète a été exploitée avant d'annoncer sa régénération
         if was_depleted and self.resources == self.initial_resources and not self.regenerated:
-            print(f"\n🌍✨ La planète **{self.name}** a retrouvé toutes ses ressources ! ✨\n")
+            print(f"\n🌍✨ La planète {self.name} a retrouvé toutes ses ressources ! ✨\n")
             self.regenerated = True  # ✅ Marquer la planète comme régénérée
 
         # ✅ Réactiver la régénération si on mine à nouveau
@@ -49,7 +49,13 @@ class Planet:
             self.regenerated = False  # Permet d'afficher à nouveau le message si la planète est minée
     
     def colonize(self):
+        """ Colonise la planète et augmente durablement ses ressources """
         if not self.colonized:
+            for resource in self.resources:
+                self.resources[resource] += 10  # ✅ Augmente les ressources actuelles
+                self.initial_resources[resource] += 10  # ✅ Augmente aussi la limite de régénération
+
             self.colonized = True
+            print(f"🌍 {self.name} est colonisée ! Ressources augmentées et la planète pourra régénérer davantage.")
             return True
         return False
