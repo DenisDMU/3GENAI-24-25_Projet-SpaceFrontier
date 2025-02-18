@@ -64,7 +64,7 @@ class Player:
                 print(f"{planet.name} est déjà colonisée.")
                 return False
         else:
-            print(f"La colonisation de {planet.name} par méthode {method} a échoué. ❌")
+            print(f"\nLa colonisation de {planet.name} par méthode {method} a échoué. ❌")
             return False
 
     def barre_de_chargement(self, duree):
