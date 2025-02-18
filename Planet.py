@@ -11,13 +11,29 @@ class Planet:
         self.max_sectors = 4
         self.colonization_type = None
         self.is_being_colonized = False
+        self.fuel = 100
+        self.collected_resources = {}
 
     def collect_resources(self):
         if self.resources:
             collected = self.resources.copy()
+            for key, value in collected.items():
+                self.collected_resources[key] = self.collected_resources.get(key, 0) + value
             self.resources = {}
-            return collected
-        return {}
+            print(f"\033[1;32mVous avez collecté {collected} de {self.name}.\033[0m")
+        else:
+            print(f"\033[1;31mAucune ressource disponible sur {self.name}.\033[0m")
+
+    def explore(self):
+        if self.fuel >= 10:
+            self.fuel -= 10
+            print(f"\033[1;33mVous explorez la planète {self.name}.\033[0m")
+            time.sleep(1)
+            return True
+        else:
+            print("\033[1;31mCarburant insuffisant pour explorer.\033[0m")
+            time.sleep(1)
+            return False
 
     def colonize(self):
         if self.colonized_sectors >= self.max_sectors:
@@ -66,38 +82,10 @@ class Planet:
                 sys.stdout.flush()
                 time.sleep(0.2)
 
-class Player:
-    def __init__(self, name):
-        self.name = name
-        self.fuel = 100
-        self.resources = {}
-        self.colonies = []
+    def get_status(self):
+        return f"{self.name} ({self.colonized_sectors}/{self.max_sectors} secteurs" + (f", {self.colonization_type})" if self.colonization_type else ")")
 
-    def explore(self, planet):
-        if self.fuel >= 10:
-            self.fuel -= 10
-            print(f"\033[1;33mVous explorez la planète {planet.name}.\033[0m")
-            time.sleep(1)
-            return True
-        else:
-            print("\033[1;31mCarburant insuffisant pour explorer.\033[0m")
-            time.sleep(1)
-            return False
-
-    def collect(self, planet):
-        if planet.resources:
-            collected = planet.collect_resources()
-            for key, value in collected.items():
-                self.resources[key] = self.resources.get(key, 0) + value
-            print(f"\033[1;32mVous avez collecté {collected} de {planet.name}.\033[0m")
-        else:
-            print(f"\033[1;31mAucune ressource disponible sur {planet.name}.\033[0m")
-
-    def add_colony(self, planet):
-        if planet not in self.colonies:
-            self.colonies.append(planet)
-
-def planet_menu(planet, player):
+def planet_menu(planet):
     while True:
         print(f"\n\033[1;34mPlanète : {planet.name}")
         print(f"Taille : {planet.size}")
@@ -106,17 +94,19 @@ def planet_menu(planet, player):
             print(f"Type de colonisation : {planet.colonization_type}")
         print("\n1. Explorer")
         print("2. Coloniser")
-        print("3. Retourner à la liste des planètes\033[0m")
+        print("3. Collecter les ressources")
+        print("4. Retourner à la liste des planètes\033[0m")
 
         choix = input("Que souhaitez-vous faire ? ")
 
         if choix == "1":
-            player.explore(planet)
+            planet.explore()
         elif choix == "2":
             while planet.colonize():
-                player.add_colony(planet)
                 continue
         elif choix == "3":
+            planet.collect_resources()
+        elif choix == "4":
             break
         else:
             print("\033[1;31mChoix invalide.\033[0m")
@@ -128,7 +118,9 @@ planets = [
     Planet("Kronos", "Petite", {"cristaux": 10})
 ]
 
-player = Player("Explorateur")
+# Variables globales pour le suivi des ressources et du carburant
+total_resources = {}
+total_fuel = 100
 
 while True:
     print("\n\033[1;34m=== Liste des Planètes ===")
@@ -145,11 +137,22 @@ while True:
     try:
         choix_num = int(choix)
         if 1 <= choix_num <= len(planets):
-            planet_menu(planets[choix_num - 1], player)
+            planet_menu(planets[choix_num - 1])
         elif choix_num == len(planets) + 1:
-            print(f"\033[1;34mCarburant : {player.fuel}")
-            print(f"Ressources : {player.resources}")
-            print(f"Colonies : {[p.name + ' (' + str(p.colonized_sectors) + '/' + str(p.max_sectors) + ' secteurs, ' + str(p.colonization_type) + ')' for p in player.colonies]}\033[0m")
+            # Calculer les totaux
+            all_resources = {}
+            total_fuel = sum(planet.fuel for planet in planets)
+            for planet in planets:
+                for resource, amount in planet.collected_resources.items():
+                    all_resources[resource] = all_resources.get(resource, 0) + amount
+
+            print(f"\033[1;34mCarburant total: {total_fuel}")
+            print(f"Ressources totales: {all_resources}")
+            print("Colonies:")
+            for planet in planets:
+                if planet.colonized_sectors > 0:
+                    print(f"- {planet.get_status()}")
+            print("\033[0m")
             time.sleep(2)
         elif choix_num == len(planets) + 2:
             break
