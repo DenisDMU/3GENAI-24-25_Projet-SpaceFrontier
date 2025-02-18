@@ -1,3 +1,5 @@
+import time
+import threading
 from Vaisseau import Vaisseau, upgrade_ship
 from Planet import Planet
 from Player import Player
@@ -24,6 +26,13 @@ missions = [
     Mission("Coloniser toutes les planètes", lambda p: len(p.colonies) >= 3, 150),
 ]
 
+def regeneration_automatique():
+    while True:
+        time.sleep(120)
+        for planet in planets:
+            planet.regenerate_resources()
+        print("🌍 Les planètes ont régénéré leurs ressources !")
+
 def afficher_missions(player):
     """ Affiche les missions et vérifie leur accomplissement """
     print("\n📜 Missions disponibles :")
@@ -48,6 +57,8 @@ def main():
         print("5. Quitter")
 
         choix = input("Que voulez-vous faire ? ")
+
+        threading.Thread(target=regeneration_automatique, daemon=True).start()
 
         if choix == "1":
             # 🔽 Nouveau système : Le joueur choisit une planète et peut ensuite agir dessus
