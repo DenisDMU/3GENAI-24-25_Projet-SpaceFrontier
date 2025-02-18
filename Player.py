@@ -4,11 +4,15 @@ class Player:
         self.fuel = 100
         self.resources = {}
         self.colonies = []
+        self.credits = 0  # Ajout des crédits
+        self.planetes_explorees = []  # ✅ Liste des planètes explorées
     
     def explore(self, planet):
         if self.fuel >= 10:
             self.fuel -= 10
             print(f"Vous explorez la planète {planet.name}.")
+            if planet not in self.planetes_explorees:
+                self.planetes_explorees.append(planet)  # ✅ Ajouter la planète explorée
             return True
         else:
             print("Carburant insuffisant pour explorer.")
