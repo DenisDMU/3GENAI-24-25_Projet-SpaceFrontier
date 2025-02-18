@@ -154,17 +154,17 @@ class Vaisseau:
         print(f"{RESET}")  # Fin de la couleur bleue
 
 def upgrade_ship(vaisseau):
-    print(f"{RED}=== MENU D'AMÉLIORATION DU VAISSEAU ==={RESET}")
-    print(f"{RED}1. Améliorer les moteurs")
-    print("2. Améliorer les armes")
-    print("3. Améliorer les scanners")
-    print("4. Améliorer le carburant")
-    print("5. Afficher les statistiques")
-    print("6. Nommer le vaisseau")
-    print("7. Améliorer le modèle du vaisseau")
-    print("8. Choisir le modèle du vaisseau")
-    print("9. Afficher votre vaisseau")
-    print(f"10. Retour{RESET}")
+    print(f"{YELLOW}=== MENU D'AMÉLIORATION DU VAISSEAU ==={RESET}")
+    print(f"{RED}1. Améliorer les moteurs{RESET}")
+    print(f"{BLUE}2. Améliorer les armes{RESET}")
+    print(f"{GREEN}3. Améliorer les scanners{RESET}")
+    print(f"{YELLOW}4. Améliorer le carburant{RESET}")
+    print(f"{RED}5. Afficher les statistiques{RESET}")
+    print(f"{BLUE}6. Nommer le vaisseau{RESET}")
+    print(f"{GREEN}7. Améliorer le modèle du vaisseau{RESET}")
+    print(f"{YELLOW}8. Choisir le modèle du vaisseau{RESET}")
+    print(f"{RED}9. Afficher votre vaisseau{RESET}")
+    print(f"{BLUE}10. Retour{RESET}")
 
     choice = input(f"{BLUE}Votre choix: {RESET}")
 
