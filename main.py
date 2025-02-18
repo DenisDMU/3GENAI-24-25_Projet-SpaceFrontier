@@ -33,6 +33,13 @@ def auto_regeneration(planets):
         for planet in planets:
             planet.regenerate_resources()
 
+def auto_production(player):
+    """ Ajoute les ressources des colonies au joueur toutes les 3 minutes """
+    while True:
+        time.sleep(180)  # Attendre 180 secondes
+        player.produce_resources()
+        print("\n🏭 Production automatique des colonies ajoutée aux ressources du joueur !")
+
 def afficher_missions(player):
     """ Affiche les missions et vérifie leur accomplissement """
     print("\n📜 Missions disponibles :")
@@ -59,6 +66,7 @@ def main():
         choix = input("Que voulez-vous faire ? ")
 
         threading.Thread(target=auto_regeneration, args=(planets,), daemon=True).start()
+        threading.Thread(target=auto_production, args=(player,), daemon=True).start()
 
         if choix == "1":
             # 🔽 Nouveau système : Le joueur choisit une planète et peut ensuite agir dessus
