@@ -64,20 +64,21 @@ def main():
             print("Planètes disponibles pour l'exploration:")
             for i, planet in enumerate(planets):
                 print(f"{i + 1}. {planet.name} ({'Colonisée' if planet.colonized else 'Libre'})")
-            idx = int(input("Choisissez une planète à explorer : ")) - 1
-            if 0 <= idx < len(planets):
-                if player.explore(planets[idx]):
-                    vaisseau.carburant -= 10
-                    verifier_toutes_les_missions(player, vaisseau)
+            
+            try:
+                idx = int(input("Choisissez une planète à explorer (ou 'q' pour quitter) : ")) - 1
+                if 0 <= idx < len(planets):
+                    if player.explore(planets[idx]):
+                        vaisseau.carburant -= 10
+                        verifier_toutes_les_missions(player, vaisseau)
 
-                while True:
-                    print(f"\nQue voulez-vous faire sur {planets[idx].name} ?")
-                    print("1. Collecter des ressources")
-                    print("2. Coloniser la planète")
-                    print("3. Retour au menu principal")
+                    while True:
+                        print(f"\nQue voulez-vous faire sur {planets[idx].name} ?")
+                        print("1. Collecter des ressources")
+                        print("2. Coloniser la planète")
+                        print("3. Retour au menu principal")
 
-                    action = input("Votre choix : ")
-
+                        action = input("Votre choix : ")
                     if action == "1":
                         player.collect(planets[idx])
                         verifier_toutes_les_missions(player, vaisseau)
@@ -86,8 +87,10 @@ def main():
                         verifier_toutes_les_missions(player, vaisseau)
                     elif action == "3":
                         break
-                    else:
-                        print("Choix invalide, essayez encore.")
+                else:
+                    print("Numéro de planète invalide.")
+            except ValueError:
+                print("Entrée invalide. Veuillez entrer un numéro de planète valide.")
 
         elif choix == "2":
             upgrade_ship(vaisseau)
