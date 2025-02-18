@@ -3,6 +3,7 @@ from Planet import Planet
 from Player import Player
 from Mission import Mission
 import time
+import threading
 
 # Définition des couleurs ANSI
 RED = '\033[91m'
