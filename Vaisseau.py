@@ -4,49 +4,81 @@ class Vaisseau:
         self.moteurs = 1
         self.armes = 1
         self.scanners = 1
-        self.carburant = 100
-        self.credits = 0
+        self.carburant = 100  # Capacité initiale
+        self.credits = 100000000
         self.modele = "Basique"  # Modèle par défaut
+        self.modeles_debloques = ["Basique"]  # Liste des modèles débloqués
 
     def ameliorer_moteurs(self):
-        if self.moteurs < 10 and self.credits >= 1:
-            print("Amélioration des moteurs. Vous pouvez maintenant voyager plus vite.")
+        cout = self.moteurs * 100  # Coût augmente de 100 crédits par niveau
+        if self.moteurs < 100 and self.credits >= cout:
+            print(f"Amélioration des moteurs pour {cout} crédits. Vous pouvez maintenant voyager plus vite.")
             self.moteurs += 1
-            self.credits -= 1
-        elif self.credits < 1:
-            print("Crédits insuffisants pour améliorer les moteurs.")
+            self.credits -= cout
+        elif self.credits < cout:
+            print(f"Crédits insuffisants pour améliorer les moteurs. Coût : {cout} crédits.")
         else:
             print("Vos moteurs sont déjà au maximum.")
 
+    def ameliorer_carburant(self):
+        cout = (self.carburant // 10) * 100  # Coût augmente de 100 crédits par tranche de 10
+        if self.carburant < 1000 and self.credits >= cout:
+            print(f"Amélioration du carburant pour {cout} crédits. Vous pouvez maintenant voyager plus loin.")
+            self.carburant += 10
+            self.credits -= cout
+        elif self.credits < cout:
+            print(f"Crédits insuffisants pour améliorer le carburant. Coût : {cout} crédits.")
+        else:
+            print("Votre carburant est déjà au maximum.")
+
     def ameliorer_armes(self):
-        if self.armes < 10 and self.credits >= 1:
-            print("Amélioration des armes. Vous êtes maintenant plus puissant contre les ennemis.")
+        cout = self.armes * 100  # Coût augmente de 100 crédits par niveau
+        if self.armes < 100 and self.credits >= cout:
+            print(f"Amélioration des armes pour {cout} crédits. Vous êtes maintenant plus puissant contre les ennemis.")
             self.armes += 1
-            self.credits -= 1
-        elif self.credits < 1:
-            print("Crédits insuffisants pour améliorer les armes.")
+            self.credits -= cout
+        elif self.credits < cout:
+            print(f"Crédits insuffisants pour améliorer les armes. Coût : {cout} crédits.")
         else:
             print("Vos armes sont déjà au maximum.")
 
     def ameliorer_scanners(self):
-        if self.scanners < 10 and self.credits >= 1:
-            print("Amélioration des scanners. Vous pouvez maintenant détecter plus de ressources.")
+        cout = self.scanners * 100  # Coût augmente de 100 crédits par niveau
+        if self.scanners < 100 and self.credits >= cout:
+            print(f"Amélioration des scanners pour {cout} crédits. Vous pouvez maintenant détecter plus de ressources.")
             self.scanners += 1
-            self.credits -= 1
-        elif self.credits < 1:
-            print("Crédits insuffisants pour améliorer les scanners.")
+            self.credits -= cout
+        elif self.credits < cout:
+            print(f"Crédits insuffisants pour améliorer les scanners. Coût : {cout} crédits.")
         else:
             print("Vos scanners sont déjà au maximum.")
-    
+
     def ameliorer_vaisseau(self):
-        if self.modele == "Basique" and self.credits >=5:
-            self.model == "Mercenaire"
-            self.credits -= 5
-        elif self.modele == "Mercenaire" and self.credits >= 5:
-            self.model == "Conqueror"
-            self.credits -= 5
-        elif self.modele == "Conqueror":
-            print("Votre vaisseau est déjà au maximum.")
+        if self.modele == "Basique" and "Mercenaire" not in self.modeles_debloques and self.credits >= 5:
+            confirmation = input("Payer 5 crédits pour débloquer le modèle Mercenaire ? (Oui/Non): ")
+            if confirmation.lower() == "oui":
+                self.modeles_debloques.append("Mercenaire")
+                self.credits -= 5
+                print("Modèle Mercenaire débloqué !")
+        elif self.modele == "Mercenaire" and "Conqueror" not in self.modeles_debloques and self.credits >= 5:
+            confirmation = input("Payer 5 crédits pour débloquer le modèle Conqueror ? (Oui/Non): ")
+            if confirmation.lower() == "oui":
+                self.modeles_debloques.append("Conqueror")
+                self.credits -= 5
+                print("Modèle Conqueror débloqué !")
+        else:
+            print("Vous avez déjà débloqué tous les modèles disponibles.")
+
+    def choisir_modele(self):
+        print("Modèles débloqués :")
+        for i, modele in enumerate(self.modeles_debloques, start=1):
+            print(f"{i}. {modele}")
+        choix = int(input("Choisissez un modèle par son numéro : ")) - 1
+        if 0 <= choix < len(self.modeles_debloques):
+            self.modele = self.modeles_debloques[choix]
+            print(f"Vous avez choisi le modèle : {self.modele}")
+        else:
+            print("Choix invalide.")
 
     def afficher_statistiques(self):
         print(f"Nom: {self.nom}")
@@ -56,7 +88,6 @@ class Vaisseau:
         print(f"Scanners: {self.scanners}")
         print(f"Carburant: {self.carburant}")
         print(f"Crédits: {self.credits}")
-        print(f"Modele: {self.modele}")
 
     def nommer_vaisseau(self, nom):
         self.nom = nom
@@ -65,6 +96,9 @@ class Vaisseau:
     def afficher_vaisseau(self):
         if self.modele == "Basique":
             print("""
+
+            Vaisseau Basique
+
             [  (    _____
                 \__\,-'//   `--._
                 [_/~||,-----.\@_\\___
@@ -75,7 +109,9 @@ class Vaisseau:
         """)
         elif self.modele == "Mercenaire":
             print("""
-                      		)__/... \_
+
+            Mercenaire
+
                       00)__)  .___)
      ___              _0__)\_/ OOO/`':.
     0)_^'-._    __..-'`:  \ | / ::  \ o`:
@@ -90,6 +126,9 @@ class Vaisseau:
         """)
         elif self.modele == "Conqueror":
             print("""
+
+            Conqueror
+
                           `. ___
                     __,' __`.                _..----....____
         __...--.'``;.   ,.   ;``--..__     .'    ,-._    _.-'
@@ -113,11 +152,13 @@ def upgrade_ship(vaisseau):
     print("1. Améliorer les moteurs")
     print("2. Améliorer les armes")
     print("3. Améliorer les scanners")
-    print("4. Afficher les statistiques")
-    print("5. Nommer le vaisseau")
-    print("6. Choisir le modèle du vaisseau")
-    print("7. Afficher votre vaisseau")
-    print("8. Retour")
+    print("4. Améliorer le carburant")
+    print("5. Afficher les statistiques")
+    print("6. Nommer le vaisseau")
+    print("7. Améliorer le modèle du vaisseau")
+    print("8. Choisir le modèle du vaisseau")
+    print("9. Afficher votre vaisseau")
+    print("10. Retour")
 
     choice = input("Votre choix: ")
 
@@ -128,16 +169,19 @@ def upgrade_ship(vaisseau):
     elif choice == '3':
         vaisseau.ameliorer_scanners()
     elif choice == '4':
-        vaisseau.afficher_statistiques()
+        vaisseau.ameliorer_carburant()
     elif choice == '5':
+        vaisseau.afficher_statistiques()
+    elif choice == '6':
         nom = input("Entrez le nom de votre vaisseau: ")
         vaisseau.nommer_vaisseau(nom)
-    elif choice == '6':
-        modele = input("Upgrad: ")
-        vaisseau.ameliorer_vaisseau(modele)
     elif choice == '7':
-        vaisseau.afficher_vaisseau()
+        vaisseau.ameliorer_vaisseau()
     elif choice == '8':
+        vaisseau.choisir_modele()
+    elif choice == '9':
+        vaisseau.afficher_vaisseau()
+    elif choice == '10':
         return
     else:
         print("Option invalide.")
