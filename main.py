@@ -3,6 +3,7 @@ from Planet import Planet
 from Player import Player
 from Mission import Mission
 import time
+import random
 
 # Définition des couleurs ANSI
 RED = '\033[91m'
@@ -107,13 +108,24 @@ def main():
                     player.collect(planet)
                     verifier_toutes_les_missions(player, vaisseau)
                 elif action == "2":
-                    player.colonize(planet)
+                    print("Choisissez la méthode de colonisation :")
+                    print("1. Pacifique")
+                    print("2. Violente")
+                    method_choice = input("Votre choix : ")
+
+                    if method_choice == "1":
+                        player.colonize_planet(planet, "pacifique")
+                    elif method_choice == "2":
+                        player.colonize_planet(planet, "violente")
+                    else:
+                        print("Choix invalide, retour au menu précédent.")
+                        continue
+
                     verifier_toutes_les_missions(player, vaisseau)
                 elif action == "3":
                     break
                 else:
                     print("Choix invalide, essayez encore.")
-
 
         elif choix == "2":
             upgrade_ship(vaisseau)
