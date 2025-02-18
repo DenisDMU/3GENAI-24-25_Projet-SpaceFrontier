@@ -72,41 +72,48 @@ def main():
         choix = input("Que voulez-vous faire ? ")
 
         if choix == "1":
-            print("Planètes disponibles pour l'exploration:")
-            for i, planet in enumerate(planets):
-                print(f"{i + 1}. {planet.name} ({'Colonisée' if planet.colonized else 'Libre'})")
+            while True:
+                print("Planètes disponibles pour l'exploration:")
+                for i, planet in enumerate(planets):
+                    print(f"{i + 1}. {planet.name} ({'Colonisée' if planet.colonized else 'Libre'})")
+        
+                idx = int(input("Choisissez une planète à explorer : ")) - 1
+                if 0 <= idx < len(planets):
+                    planet = planets[idx]
+                    afficher_caracteristiques_planete(planet)
+                    confirmation = input("Êtes-vous sûr de vouloir explorer cette planète ? (O/N) : ").lower()
             
-            idx = int(input("Choisissez une planète à explorer : ")) - 1
-            if 0 <= idx < len(planets):
-                planet = planets[idx]
-                afficher_caracteristiques_planete(planet)
-                confirmation = input("Êtes-vous sûr de vouloir explorer cette planète ? (Oui/Non) : ").lower()
-                
-                if confirmation == "oui":
-                    duree_voyage = min(10, max(1, len(planet.name)))  # Simulation d'une durée basée sur la planète
-                    barre_de_chargement(duree_voyage)
-                    if player.explore(planet):
-                        vaisseau.carburant -= 10
-                        verifier_toutes_les_missions(player, vaisseau)
-                
-                while True:
-                    print(f"\nQue voulez-vous faire sur {planet.name} ?")
-                    print("1. Collecter des ressources")
-                    print("2. Coloniser la planète")
-                    print("3. Retour au menu principal")
-
-                    action = input("Votre choix : ")
-
-                    if action == "1":
-                        player.collect(planet)
-                        verifier_toutes_les_missions(player, vaisseau)
-                    elif action == "2":
-                        player.colonize(planet)
-                        verifier_toutes_les_missions(player, vaisseau)
-                    elif action == "3":
+                    if confirmation == "o":
+                        duree_voyage = min(10, max(1, len(planet.name)))  # Simulation d'une durée basée sur la planète
+                        barre_de_chargement(duree_voyage)
+                        if player.explore(planet):
+                            vaisseau.carburant -= 10
+                            verifier_toutes_les_missions(player, vaisseau)
                         break
                     else:
-                        print("Choix invalide, essayez encore.")
+                        print("Retour au choix de la planète.")
+                else:
+                    print("Choix invalide, essayez encore.")
+
+            while True:
+                print(f"\nQue voulez-vous faire sur {planet.name} ?")
+                print("1. Collecter des ressources")
+                print("2. Coloniser la planète")
+                print("3. Retour au menu principal")
+
+                action = input("Votre choix : ")
+
+                if action == "1":
+                    player.collect(planet)
+                    verifier_toutes_les_missions(player, vaisseau)
+                elif action == "2":
+                    player.colonize(planet)
+                    verifier_toutes_les_missions(player, vaisseau)
+                elif action == "3":
+                    break
+                else:
+                    print("Choix invalide, essayez encore.")
+
 
         elif choix == "2":
             upgrade_ship(vaisseau)
